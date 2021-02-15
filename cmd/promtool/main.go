@@ -639,10 +639,13 @@ func QueryLabels(url *url.URL, name string, start, end string, p printer) int {
 		return 1
 	}
 
+	// Fix argument requirements for v1.LabelValues
+	matches := []string{}
+
 	// Run query against client.
 	api := v1.NewAPI(c)
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
-	val, warn, err := api.LabelValues(ctx, name, stime, etime)
+	val, warn, err := api.LabelValues(ctx, name, matches, stime, etime)
 	cancel()
 
 	for _, v := range warn {
